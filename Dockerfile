@@ -1,5 +1,8 @@
 FROM ubuntu:20.04
 
+ARG DEBIAN_FRONTEND=noninterative
+#RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 # Install the 64-bit toolchain for a 64-bit kernel
 RUN apt-get update && apt-get install -y \
     git \
