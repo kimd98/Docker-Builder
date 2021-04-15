@@ -57,15 +57,16 @@
 ```
   # cp /data/rpi_cm4_0/upverter-overlay.dts linux/arch/arm64/boot/dts/overlays/
 ```
-6. Compile dts to dtbo
+~~6. Compile dts to dtbo (Makefile has been updated)~~
 ```
   # cd /linux/arch/arm64/boot/dts/overlays
   # dtc -I dts -O dtb -o upverter.dtbo upverter-overlay.dts
-```
+``` 
+
 7. Kernel Cross-compilation (only dtbs)
 ```
-  # cd /linux
-  # KERNEL=kernel8
-  # make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
-  # make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
+   # cd /linux
+   # KERNEL=kernel8
+   # make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
+   # make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
 ```
