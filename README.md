@@ -25,7 +25,7 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
 make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 ```
 
-# Docker Commands
+## Docker Commands
 
 1. Build an image locally (optional)
 ```
@@ -58,4 +58,11 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 5. Copy dts file to linux kernel overlays folder
 ```
   # cp /data/rpi_cm4_0/upverter-overlay.dts linux/arch/arm64/boot/dts/overlays/
+```
+6. Recompile the dtbs
+```
+cd linux
+KERNEL=kernel8
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
 ```
