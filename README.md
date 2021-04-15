@@ -24,3 +24,38 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
 ```
 make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 ```
+
+# Docker Commands
+
+1. Build an image locally (optional)
+```
+  $ git clone https://github.com/kimd98/docker-builder.git
+  $ cd docker-builder
+  $ docker build .
+```
+
+2. Create a shared folder on host and copy AutoBSP
+```
+  $ mkdir ~/docker-data
+  $ sudo cp <AutoBSP filepath> ~/docker-data/
+```
+   - shared folder "docker data" created on host computer
+
+3. Run a docker container from DockerHub
+```
+  $ docker run  -dit -P --name docker-data -v ~/docker-data:/data gumstix2021lena/docker-builder:main
+```
+   - docker container name: docker-data
+
+4. Access to the container
+```
+  $ docker attach docker-data
+```
+   - To restart the container, type `docker start -a docker-data`
+   - To find a container ID, type `docker ps -a`
+   - To see the AutoBSP folder, type `ls /data/`
+
+5. Copy dts file to linux kernel overlays folder
+```
+  # cp /data/rpi_cm4_0/upverter-overlay.dts linux/arch/arm64/boot/dts/overlays/
+```
