@@ -20,5 +20,13 @@ RUN git clone --depth=1 https://github.com/raspberrypi/linux && \
     make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig && \
     make -j 4 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 
+# Get AutoBSP and generate dtbo
+RUN cp ../data/dts/upverter-overlay.dts arch/arm/boot/dts/overlays/ && \
+    KERNEL=kernel8 && \
+    make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig  && \
+    make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
+    cp arch/arm/boot/dts/overlays/upverter.dtbo ../data/dtbo/
+
 # Process done
-CMD [“echo”,”CM4 Docker Image”]
+CMD echo Check dtbo
+
