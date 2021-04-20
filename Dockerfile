@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -y \
     libc6-dev \
     libncurses5-dev \
     crossbuild-essential-arm64 \
-    sed
+    sed \
+    g++ \
+    device-tree-compiler
 
 # Get the source code & 64-bit build with configs for CM4
 RUN git clone --depth=1 https://github.com/raspberrypi/linux && \
@@ -20,10 +22,6 @@ RUN git clone --depth=1 https://github.com/raspberrypi/linux && \
     KERNEL=kernel8 && \
     make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig && \
     make -j 4 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
-
-RUN apt-get install -y \
-    g++ \
-    device-tree-compiler 
 
 # Change the default shell from /bin/sh to /bin/bash
 SHELL ["/bin/bash", "-c"]
@@ -38,7 +36,5 @@ CMD  cp ../data/dts/upverter-overlay.dts linux/arch/arm/boot/dts/overlays/ && \
      KERNEL=kernel8  && \
      make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig && \
      make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
-#     rm -r /data/dtbo && \
      mkdir -p /data/dtbo && \
-     cp /linux/arch/arm/boot/dts/overlays/upverter.dtbo ../data/dtbo/upverter.dtbo && \ 
-     echo DONE
+     cp /linux/arch/arm/boot/dts/overlays/upverter.dtbo ../data/dtbo/upverter.dtbo
