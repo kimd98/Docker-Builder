@@ -1,65 +1,29 @@
 # docker-builder
 
-## Raspberry Pi Compute Module 4 (64-bit) - Dockerfile
-
-1. Install required dependencies and the 64-bit toolchain for a 64-bit kernel
-```
-  $ sudo apt install git bc bison flex libssl-dev make libc6-dev libncurses5-dev
-  $ sudo apt install crossbuild-essential-arm64 device-tree-compiler nano
-```
-2. Get sources
-```
-  $ git clone --depth=1 https://github.com/raspberrypi/linux
-```
-3. 64-bit configs for CM4
-```
-  $ cd linux
-  $ KERNEL=kernel8
-  $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
-```
-4. 64-bit build with configs
-```
-  $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
-```
-
-## Docker Commands
-
-1. Build an image locally (optional)
-```
-  $ git clone https://github.com/kimd98/docker-builder.git
-  $ cd docker-builder
-  $ docker build .
-```
-2. Copy AutoBSP dts file to a shared folder
+## Quick Start 
+1. Make a shared folder **docker-data** (only for initial use)
 ```
   $ mkdir ~/docker-data
-  $ sudo cp <AutoBSP filepath> ~/docker-data/dts/
 ```
-   - shared folder "docker data" created on host computer
-   - 2 subfolders: dts, dtbo
-3. Run a docker container from DockerHub
+2. Place the AutoBSP dts file in the shared folder **dts subfolder**
 ```
-  $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:main
+  $ cp path/to/AutoBSP/upverter-overlay.dts ~/docker-data/dts/
 ```
-4. Access to the container
+3. Build a docker container
+
+   **[option 1]** Get a docker image from DockerHub
 ```
-  $ docker attach docker-data
+    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:main
 ```
-   - To restart the container, type `docker start -a docker-data`
-   - To find a container ID, type `docker ps -a`
-   - To see the AutoBSP folder, type `ls /data/`
-5. Copy dts file to linux kernel overlays folder
+   **[Option 2]** Build locally
 ```
-  # cp /data/dts/upverter-overlay.dts linux/arch/arm/boot/dts/overlays/
+    $ git clone https://github.com/kimd98/docker-builder.git
+    $ cd docker-builder
+    $ docker build -t docker-builder .
+    $ docker run  -it --rm -v ~/docker-data:/data docker-builder
 ```
-6. Kernel Cross-compilation (only dtbs)
+
+4. Check the **dtbo subfolder** to see a generated dtbo file
 ```
-   # cd /linux
-   # KERNEL=kernel8
-   # make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
-   # make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
-```
-7. Save dtbo file in the shared folder
-```
-  # cp linux/arch/arm/boot/dts/overlays/upverter.dtbo /data/dtbo/
+  $ ls ~/docker-data/dtbo
 ```
