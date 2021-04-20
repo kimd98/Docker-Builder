@@ -21,6 +21,7 @@
     $ docker build -t docker-builder .
     $ docker run  -it --rm -v ~/docker-data:/data docker-builder
     ```
+    - running time approximately 3 seconds
 
 4. Check the **dtbo subfolder** to see a generated dtbo file
 ```
