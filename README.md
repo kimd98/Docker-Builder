@@ -12,16 +12,17 @@
 3. Build a docker container
 
    **[option 1]** Get a docker image from DockerHub
-```
-    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:main
-```
-   **[Option 2]** Build locally
-```
+    ```
+    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:main   
+    ```
+
+   **[option 2]** Build locally
+    ```
     $ git clone https://github.com/kimd98/docker-builder.git
     $ cd docker-builder
     $ docker build -t docker-builder .
     $ docker run  -it --rm -v ~/docker-data:/data docker-builder
-```
+    ```
 
 4. Check the **dtbo subfolder** to see a generated dtbo file
 ```
