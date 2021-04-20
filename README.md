@@ -16,8 +16,8 @@
 
    **[option 2]** Build locally
     ```
-    $ git clone https://github.com/kimd98/docker-builder.git
-    $ cd docker-builder
+    $ git clone https://github.com/kimd98/Docker-Builder.git
+    $ cd Docker-Builder
     $ docker build -t docker-builder .
     $ docker run  -it --rm -v ~/docker-data:/data docker-builder
     ```
