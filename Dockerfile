@@ -14,14 +14,21 @@ RUN apt-get update && apt-get install -y \
     crossbuild-essential-arm64 \
     sed \
     g++ \
-    device-tree-compiler
+    device-tree-compiler \
+    wget
 
-# Get the source code & 64-bit build with configs for CM4
-RUN git clone --depth=1 https://github.com/raspberrypi/linux && \
+# Get the source code from yocto branch and balena commit & 64-bit build with configs for CM4
+RUN wget -O linux-raspberrypi_5.4.bb http://git.yoctoproject.org/cgit/cgit.cgi/meta-raspberrypi/tree/recipes-kernel/linux/linux-raspberrypi_5.4.bb?h=dunfell && \
+    wget -O linux-raspberrypi_5.4.bbappend https://github.com/balena-os/balena-raspberrypi/blob/master/layers/meta-balena-raspberrypi/recipes-kernel/linux/linux-raspberrypi_5.4.bbappend && \
+    BRANCH=$(sed '/BRANCH ?= "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' linux-raspberrypi_5.4.bb) && \
+    HASH_COMMIT=$(sed '/SRCREV_machine = &quot;/!d;s//&\n/;s/.*\n//;:a;/&/bb;$!{n;ba};:b;s//\n&/;P;D' linux-raspberrypi_5.4.bbappend) && \
+    git clone --branch $BRANCH https://github.com/raspberrypi/linux.git && \
+    git checkout $HASH_COMMIT && \
+    git reset --hard && \
     cd linux && \
     KERNEL=kernel8 && \
     make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig && \
-    make -j 4 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
+    make -j 6 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 
 # Change the default shell from /bin/sh to /bin/bash
 SHELL ["/bin/bash", "-c"]
