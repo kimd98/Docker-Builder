@@ -11,8 +11,9 @@
 
    **[option 1]** Get a docker image from DockerHub
     ```
-    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:main   
+    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:<branch>   
     ```
+    - branch name: rpi_cm4 / jetson_nano
 
    **[option 2]** Build locally
     ```
@@ -21,7 +22,7 @@
     $ docker build -t docker-builder .
     $ docker run  -it --rm -v ~/docker-data:/data docker-builder
     ```
-    - running time approximately 3 seconds
+    - running time: approximately 3 seconds
 
 4. Check the **dtbo subfolder** to see a generated dtbo file
 ```
