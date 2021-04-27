@@ -33,8 +33,8 @@ SHELL ["/bin/bash", "-c"]
 # Get AutoBSP and generate dtbo
 CMD  cp data/dts/upverter-overlay.dts linux/arch/arm/boot/dts/overlays/ && \
      sed '/\dtbo-$(CONFIG_ARCH_BCM2835) += /a upverter.dtbo'  linux/arch/arm/boot/dts/overlays/Makefile && \
-     cd linux  && \
-     KERNEL=kernel8  && \
+     cd linux && \
+     KERNEL=kernel8 && \
      make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig && \
      make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
      mkdir -p data/dtbo && \
