@@ -11,8 +11,9 @@
 
    **[option 1]** Get a docker image from DockerHub
     ```
-    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:main   
+    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:<branch-name>   
     ```
+    - branch: rpi_cm4, jetson_nano
 
    **[option 2]** Build locally
     ```
