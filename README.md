@@ -11,13 +11,17 @@
 
    **[option 1]** Get a docker image from DockerHub
     ```
+<<<<<<< HEAD
     $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:<branch-name>   
+=======
+    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:rpi_cm4
+>>>>>>> b2e3f92590e89c07378713ff56a8346bdf547175
     ```
     - branch: rpi_cm4, jetson_nano
 
    **[option 2]** Build locally
     ```
-    $ git clone https://github.com/kimd98/Docker-Builder.git
+    $ git clone -b rpi_cm4 https://github.com/kimd98/Docker-Builder.git
     $ cd Docker-Builder
     $ docker build -t docker-builder .
     $ docker run  -it --rm -v ~/docker-data:/data docker-builder
