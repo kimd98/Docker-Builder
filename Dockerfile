@@ -4,48 +4,46 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install the 64-bit toolchain for a 64-bit kernel
 RUN apt-get update && apt-get install -y \
     git \
-    bc \
-    bison \
-    flex \
-    libssl-dev \
     make \
-    libc6-dev \
-    libncurses5-dev \
+    bc \
     crossbuild-essential-arm64 \
     sed \
     wget
 
-# Get the source code from yocto branch and balena commit & 64-bit build with configs for CM4
-RUN wget -O kernel-source https://raw.githubusercontent.com/OE4T/meta-tegra/07f15cec44977dfba279062b36241e31b130ebfa/recipes-kernel/linux/linux-tegra_4.9.bb && \
-#    wget -O source-revision https://raw.githubusercontent.com/balena-os/balena-jetson/master/layers/meta-balena-jetson/recipes-kernel/linux/linux-tegra_%25.bbappend && \
-#    CLASS_TEGRA=$(sed '/inherit /!d;s//&\n/;s/.*\n//;:a;/require/bb;$!{n;ba};:b;s//\n&/;P;D' kernel-source) && \
-#    wget -O meta-tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/07f15cec44977dfba279062b36241e31b130ebfa/classes/${CLASS_T$
-    SOURCE_CODE=$(sed '/SRC_REPO = "/!d;s//&\n/;s/.*\n//;:a;/;/bb;$!{n;ba};:b;s//\n&/;P;D' kernel-source) && \
-#    HASH_COMMIT=$(sed '/SRCREV = "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' source-revision) && \
-#    BRANCH=$(sed '/SRCBRANCH = "/!d;s//&\n/;s/.*\n//;:a;/$/bb;$!{n;ba};:b;s//\n&/;P;D' kernel-source) && \
-#    BRANCH_EXTENSION=$(sed '/VERSION ?= "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' meta-tegra-class) && \
-#    EXTENSION_1=$(sed 's/\..*/./' ${BRANCH_EXTENSION}) && \
-#    EXTENSION_2=$(sed '/${EXTENSION_1}/!d;s//&\n/;s/.*\n//;:a;/./bb;$!{n;ba};:b;s//\n&/;P;D' $BRANCH_EXTENSION) && \
-#    BRANCH_EXTENDED=$(${BRANCH}-l4t-r${EXTENSION_1}${EXTENSION_2}) && \
-#    git clone -b $BRANCH_EXTENDED https://${SOURCE_CODE}.git && \
-    git clone https://${SOURCE_CODE}.git && \
+# Download the kernel and DT repos from NVIDIA (tag for meta-tegra L4T_VERSION)
+# Get kernel source from OE4T/linux-meta-tegra using source revision info from Balena
+# wget -O kernel-source https://raw.githubusercontent.com/OE4T/meta-tegra/07f15cec44977dfba279062b36241e31b130ebfa/recipes-kernel/linux/linux-tegra_4.9.bb && \
+RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master/classes/l4t_bsp.bbclass && \
+    wget -O source-revision https://raw.githubusercontent.com/balena-os/balena-jetson/master/layers/meta-balena-jetson/recipes-kernel/linux/linux-tegra_%25.bbappend && \
+    TAG_BRANCH=$(sed '/L4T_VERSION ?= "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' tegra-class) && \
+    HASH_COMMIT=$(sed '/SRCREV = "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' source-revision) && \
+
+    wget https://developer.nvidia.com/embedded/l4t/r32_release_v5.1/r32_release_v5.1/t210/jetson-210_linux_r32.5.1_aarch64.tbz2 && \
+    tar xjf jetson-210_linux_r32.5.1_aarch64.tbz2 && \
+    cd Linux_for_Tegra && \
+    ./source_sync.sh -k tegra-l4t-r${TAG_BRANCH} &&\
+
+    cd /Linux_for_Tegra/sources/kernel && \
+    git clone -b oe4t-patches-l4t-r${TAG_BRANCH:0:3} https://github.com/OE4T/linux-tegra-4.9.git && \
     cd linux-tegra-4.9 && \
-#    git checkout $HASH_COMMIT && \
-#    git reset --hard && \
-    KERNEL=kernel8 && \
-    make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
-    make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
+    git checkout ${HASH_COMMIT} && \
+    git reset --hard && \
+
+    TEGRA_KERNEL_OUT=kernel-compiled && \
+    export CROSS_COMPILE=aarch64-linux-gnu- && \
+    export LOCALVERSION=-tegra && \
+    mkdir -p $TEGRA_KERNEL_OUT && \
+    make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig && \
+    make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j8
 
 # Change the default shell from /bin/sh to /bin/bash
-SHELL ["/bin/bash", "-c"]
+# SHELL ["/bin/bash", "-c"]
 
-# Get AutoBSP and generate dtbo
-CMD  cp data/dts/upverter-overlay.dts linux/arch/arm/boot/dts/overlays/ && \
-     DTB=$(    upverter.dtbo \) && \
-     sed '/\dtbo-$(CONFIG_ARCH_BCM2835) += /a ${DTB}'  linux/arch/arm/boot/dts/overlays/Makefile && \
-     cd linux-tegra-4.9 && \
-     KERNEL=kernel8 && \
-     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
-     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
-     mkdir -p data/dtbo && \
-     cp linux/arch/arm/boot/dts/overlays/upverter.dtbo data/dtbo/upverter.dtbo
+#CMD  cp data/dts/devicetree-jetson_nano.dts linux-tegra-4.9/arch/arm/boot/dts/overlays/ && \
+#     DTB=$(    devicetree-jetson_nano.dtb \) && \
+#     sed '/\dtbo-$(CONFIG_ARCH_BCM2835) += /a ${DTB}'  linux-tegra-4.9/arch/arm/boot/dts/overlays/Makefile && \
+#     cd linux-tegra-4.9 && \
+#     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
+#     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
+#     mkdir -p data/dtbo && \
+#     cp linux/arch/arm/boot/dts/overlays/upverter.dtbo data/dtbo/upverter.dtbo
