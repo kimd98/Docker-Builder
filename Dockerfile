@@ -12,29 +12,25 @@ RUN apt-get update && apt-get install -y \
 
 # Download the kernel and DT repos from NVIDIA (tag for meta-tegra L4T_VERSION)
 # Get kernel source from OE4T/linux-meta-tegra using source revision info from Balena
-# wget -O kernel-source https://raw.githubusercontent.com/OE4T/meta-tegra/07f15cec44977dfba279062b36241e31b130ebfa/recipes-kernel/linux/linux-tegra_4.9.bb && \
 RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master/classes/l4t_bsp.bbclass && \
     wget -O source-revision https://raw.githubusercontent.com/balena-os/balena-jetson/master/layers/meta-balena-jetson/recipes-kernel/linux/linux-tegra_%25.bbappend && \
     TAG_BRANCH=$(sed '/L4T_VERSION ?= "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' tegra-class) && \
     HASH_COMMIT=$(sed '/SRCREV = "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' source-revision) && \
-
     wget https://developer.nvidia.com/embedded/l4t/r32_release_v5.1/r32_release_v5.1/t210/jetson-210_linux_r32.5.1_aarch64.tbz2 && \
     tar xjf jetson-210_linux_r32.5.1_aarch64.tbz2 && \
     cd Linux_for_Tegra && \
-    ./source_sync.sh -k tegra-l4t-r${TAG_BRANCH} &&\
-
-    cd /Linux_for_Tegra/sources/kernel && \
-    git clone -b oe4t-patches-l4t-r${TAG_BRANCH:0:3} https://github.com/OE4T/linux-tegra-4.9.git && \
-    cd linux-tegra-4.9 && \
-    git checkout ${HASH_COMMIT} && \
-    git reset --hard && \
-
-    TEGRA_KERNEL_OUT=kernel-compiled && \
-    export CROSS_COMPILE=aarch64-linux-gnu- && \
-    export LOCALVERSION=-tegra && \
-    mkdir -p $TEGRA_KERNEL_OUT && \
-    make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig && \
-    make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j8
+    ./source_sync.sh -k tegra-l4t-r${TAG_BRANCH} && \
+    cd sources/kernel 
+#    git clone -b oe4t-patches-l4t-r${TAG_BRANCH:0:4} https://github.com/OE4T/linux-tegra-4.9.git && \
+#    cd linux-tegra-4.9 && \
+#    git checkout ${HASH_COMMIT} && \
+#    git reset --hard
+#    TEGRA_KERNEL_OUT=kernel-compiled && \
+#    export CROSS_COMPILE=aarch64-linux-gnu- && \
+#    export LOCALVERSION=-tegra && \
+#    mkdir -p $TEGRA_KERNEL_OUT && \
+#    make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig && \
+#    make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j8
 
 # Change the default shell from /bin/sh to /bin/bash
 # SHELL ["/bin/bash", "-c"]
