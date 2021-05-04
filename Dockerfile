@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     sed \
     wget
 
+# Change the default shell from /bin/sh to /bin/bash
+SHELL ["/bin/bash", "-c"]
+
 # Download the kernel and DT repos from NVIDIA (tag for meta-tegra L4T_VERSION)
 # Get kernel source from OE4T/linux-meta-tegra using source revision info from Balena
 RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master/classes/l4t_bsp.bbclass && \
@@ -20,20 +23,17 @@ RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master
     tar xjf jetson-210_linux_r32.5.1_aarch64.tbz2 && \
     cd Linux_for_Tegra && \
     ./source_sync.sh -k tegra-l4t-r${TAG_BRANCH} && \
-    cd sources/kernel 
-#    git clone -b oe4t-patches-l4t-r${TAG_BRANCH:0:4} https://github.com/OE4T/linux-tegra-4.9.git && \
-#    cd linux-tegra-4.9 && \
-#    git checkout ${HASH_COMMIT} && \
-#    git reset --hard
-#    TEGRA_KERNEL_OUT=kernel-compiled && \
-#    export CROSS_COMPILE=aarch64-linux-gnu- && \
-#    export LOCALVERSION=-tegra && \
-#    mkdir -p $TEGRA_KERNEL_OUT && \
-#    make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig && \
-#    make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j8
-
-# Change the default shell from /bin/sh to /bin/bash
-# SHELL ["/bin/bash", "-c"]
+    cd sources/kernel && \
+    git clone -b oe4t-patches-l4t-r${TAG_BRANCH:0:4} https://github.com/OE4T/linux-tegra-4.9.git && \
+    cd linux-tegra-4.9 && \
+    git checkout ${HASH_COMMIT} && \
+    git reset --hard && \
+    TEGRA_KERNEL_OUT=kernel-compiled && \
+    export CROSS_COMPILE=aarch64-linux-gnu- && \
+    export LOCALVERSION=-tegra && \
+    mkdir -p $TEGRA_KERNEL_OUT && \
+    make ARCH=arm64 O=$TEGRA_KERNEL_OUT tegra_defconfig && \
+    make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j8
 
 #CMD  cp data/dts/devicetree-jetson_nano.dts linux-tegra-4.9/arch/arm/boot/dts/overlays/ && \
 #     DTB=$(    devicetree-jetson_nano.dtb \) && \
