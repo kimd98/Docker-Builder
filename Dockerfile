@@ -25,10 +25,10 @@ RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
 
-CMD  cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/ && \
-     sed '/makefile-path := platform/t210/porg/kernel-dts/a dtb-y += devicetree-jetson_nano.dtb'  /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/Makefile && \
-     cd /linux-tegra-4.9 && \
-     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
-     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
-     mkdir -p data/dtbo 
-#     cp /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/.. /data/dtbo/devicetree-jetson_nano.dtbo
+CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/ && \
+    sed -i '/makefile-path := /a dtb-y += devicetree-jetson_nano.dtb' /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/Makefile && \
+    cd /linux-tegra-4.9 && \
+    make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
+    make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
+    mkdir -p /data/dtbo && \
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /data/dtbo/devicetree-jetson_nano.dtb

@@ -1,7 +1,7 @@
 ## Quick Start 
-1. Make a shared folder **data-jetson_nano** (only for initial use)
+1. Make a shared folder **data-jetson_nano** on the host computer (only for initial use)
 ```
-  $ mkdir ~/data_jetson_nano
+  $ mkdir ~/data-jetson_nano
 ```
 2. Place the AutoBSP dts file in the shared folder **dts subfolder**
 ```
@@ -11,7 +11,7 @@
 
    **[option 1]** Get a docker image from DockerHub
     ```
-    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:jetson_nano 
+    $ docker run  -it --rm -v ~/data-jetson_nano:/data gumstix2021lena/docker-builder:jetson_nano 
     ```
 
    **[option 2]** Build locally
