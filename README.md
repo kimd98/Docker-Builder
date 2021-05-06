@@ -1,5 +1,5 @@
 ## Quick Start 
-1. Make a shared folder (only for initial use)
+1. Make a shared folder **data-rpi_cm4 folder** on the host computer (only for initial use)
 ```
   $ mkdir ~/data-rpi_cm4
 ```
