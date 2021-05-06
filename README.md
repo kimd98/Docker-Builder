@@ -1,11 +1,11 @@
 ## Quick Start 
-1. Make a shared folder **docker-data** (only for initial use)
+1. Make a shared folder **data-jetson_nano** (only for initial use)
 ```
-  $ mkdir ~/docker-data
+  $ mkdir ~/data_jetson_nano
 ```
 2. Place the AutoBSP dts file in the shared folder **dts subfolder**
 ```
-  $ cp path/to/AutoBSP/upverter-overlay.dts ~/docker-data/dts/
+  $ cp path/to/AutoBSP/devicetree-jetson_nano.dts ~/data-jetson_nano/dts/
 ```
 3. Build a docker container
 
@@ -18,12 +18,11 @@
     ```
     $ git clone -b jetson_nano https://github.com/kimd98/Docker-Builder.git
     $ cd Docker-Builder
-    $ docker build -t docker-builder .
-    $ docker run  -it --rm -v ~/docker-data:/data docker-builder
+    $ docker build -t docker-builder:jetson_nano .
+    $ docker run  -it --rm -v ~/data-jetson_nano:/data docker-builder:jetson_nano
     ```
-    - running time: approximately 3 seconds
 
 4. Check the **dtbo subfolder** to see a generated dtbo file
 ```
-  $ ls ~/docker-data/dtbo
+  $ ls ~/data-jetson_nano/dtbo
 ```
