@@ -1,34 +1,28 @@
 ## Quick Start 
-1. Make a shared folder **docker-data** (only for initial use)
+1. Make a shared folder (only for initial use)
 ```
-  $ mkdir ~/docker-data
+  $ mkdir ~/data-rpi_cm4
 ```
 2. Place the AutoBSP dts file in the shared folder **dts subfolder**
 ```
-  $ cp path/to/AutoBSP/upverter-overlay.dts ~/docker-data/dts/
+  $ cp path/to/AutoBSP/upverter-overlay.dts ~/data-rpi_cm4/dts/
 ```
 3. Build a docker container
 
    **[option 1]** Get a docker image from DockerHub
     ```
-<<<<<<< HEAD
-    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:<branch-name>   
-=======
-    $ docker run  -it --rm -v ~/docker-data:/data gumstix2021lena/docker-builder:rpi_cm4
->>>>>>> b2e3f92590e89c07378713ff56a8346bdf547175
+    $ docker run  -it --rm -v ~/data-rpi_cm4:/data gumstix2021lena/docker-builder:rpi_cm4
     ```
-    - branch: rpi_cm4, jetson_nano
 
    **[option 2]** Build locally
     ```
     $ git clone -b rpi_cm4 https://github.com/kimd98/Docker-Builder.git
     $ cd Docker-Builder
-    $ docker build -t docker-builder .
-    $ docker run  -it --rm -v ~/docker-data:/data docker-builder
+    $ docker build -t docker-builder:rpi_cm4 .
+    $ docker run  -it --rm -v ~/data-rpi_cm4:/data docker-builder:rpi_cm4
     ```
-    - running time approximately 3 seconds
 
 4. Check the **dtbo subfolder** to see a generated dtbo file
 ```
-  $ ls ~/docker-data/dtbo
+  $ ls ~/data-rpi_cm4/dtbo
 ```
