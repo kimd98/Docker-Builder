@@ -1006,11 +1006,13 @@ def tegraflash_sign():
     tegraflash_sign_images()
     tegraflash_generate_bct() 
     tegraflash_update_images() # Passed
-    tegraflash_update_bfs_images() # COMPLAINING "flash.xml.bin open failed"
+    # tegraflash_update_bfs_images() # COMPLAINING "flash.xml.bin open failed"
 
     info_print("Copying signed file in " + output_dir)
     signed_files.extend(tegraflash_copy_signed_binaries(tegrarcm_values['--signed_list'], output_dir))
 
+    print("Am I reaching here?")
+    
     # only if values['--cfg'] is not None :
     signed_files.extend(tegraflash_copy_signed_binaries(tegrahost_values['--signed_list'], output_dir))
     shutil.copyfile(tegrabct_values['--bct'], output_dir + "/" + tegrabct_values['--bct'])
@@ -2797,6 +2799,7 @@ def tegraflash_update_bfs_images():
             if os.path.isfile(tegrasign_values['--pubkeyhash']):
                 command.extend(['--pubkeyhash', tegrasign_values['--pubkeyhash']])
             run_command(command)
+
         info_print('Updating BFS information on BCT')
         command = exec_file('tegrabct')
         command.extend(['--bct', tegrabct_values['--bct']])
@@ -2806,7 +2809,7 @@ def tegraflash_update_bfs_images():
             command.extend(['--ignorebfs', tegraparser_values['--pt']])
         if os.path.isfile(tegrasign_values['--pubkeyhash']):
             command.extend(['--pubkeyhash', tegrasign_values['--pubkeyhash']])
-        run_command(command)
+        run_command(command)    # ERROR
 
 def tegraflash_update_boardinfo(bct_file):
     if values['--nct'] is not None:
