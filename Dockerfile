@@ -30,5 +30,5 @@ CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t21
     cd /linux-tegra-4.9 && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
-    mkdir -p /data/dtbo && \
-    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /data/dtbo/devicetree-jetson_nano.dtb
+    mkdir -p /data/dtb && \
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /data/dtb/devicetree-jetson_nano.dtb
