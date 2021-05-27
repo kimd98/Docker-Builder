@@ -1,19 +1,19 @@
 import sys
 import tegraflash_internal
 
-# from tegraflash_internal import cmd_environ, paths, tegraflash_update_img_path
-# from tegraflash_internal import tegraflash_exception, tegraflash_os_path, tegraflash_abs_path
+from tegraflash_internal import cmd_environ, paths, tegraflash_update_img_path
+from tegraflash_internal import tegraflash_exception, tegraflash_os_path, tegraflash_abs_path
 from tegraflash_internal import tegraflash_mkdevimages, tegraflash_flash, tegraflash_sign, tegraflash_encrypt_and_sign
-# from tegraflash_internal import tegraflash_test, tegraflash_read, tegraflash_write, tegraflash_erase, tegraflash_setverify, tegraflash_verify
-#from tegraflash_internal import tegraflash_ccgupdate, tegraflash_packageccg
-#from tegraflash_internal import tegraflash_parse, tegraflash_reboot, tegraflash_dump
-#from tegraflash_internal import tegraflash_rcmbl, tegraflash_rcmboot, tegraflash_encrypt_sign_binary
-#from tegraflash_internal import tegraflash_burnfuses, tegraflash_readfuses, tegraflash_blowfuses
-#from tegraflash_internal import tegraflash_provision_rollback, tegraflash_readmrr, tegraflash_symlink
-#from tegraflash_internal import tegraflash_secureflash, tegraflash_signwrite, tegraflash_nvsign
-#from tegraflash_internal import tegraflash_flush_sata, tegraflash_sata_fwdownload
-#from tegraflash_internal import tegraflash_ufs_otp, tegraflash_generate_recovery_blob
-#from tegraflash_internal import tegraflash_update_rpmb
+from tegraflash_internal import tegraflash_test, tegraflash_read, tegraflash_write, tegraflash_erase, tegraflash_setverify, tegraflash_verify
+from tegraflash_internal import tegraflash_ccgupdate, tegraflash_packageccg
+from tegraflash_internal import tegraflash_parse, tegraflash_reboot, tegraflash_dump
+from tegraflash_internal import tegraflash_rcmbl, tegraflash_rcmboot, tegraflash_encrypt_sign_binary
+from tegraflash_internal import tegraflash_burnfuses, tegraflash_readfuses, tegraflash_blowfuses
+from tegraflash_internal import tegraflash_provision_rollback, tegraflash_readmrr, tegraflash_symlink
+from tegraflash_internal import tegraflash_secureflash, tegraflash_signwrite, tegraflash_nvsign
+from tegraflash_internal import tegraflash_flush_sata, tegraflash_sata_fwdownload
+from tegraflash_internal import tegraflash_ufs_otp, tegraflash_generate_recovery_blob
+from tegraflash_internal import tegraflash_update_rpmb
 
 def encrypt():
     if sys.argv[1] == 'jetson-nano':

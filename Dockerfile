@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     bc \
     crossbuild-essential-arm64 \
     sed \
-    wget
+    wget \
+    python3
 
 SHELL ["/bin/bash", "-c"]
 
@@ -17,13 +18,14 @@ RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master
     BRANCH=$(sed '/L4T_VERSION ?= "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' tegra-class) && \
     HASH_COMMIT=$(sed '/SRCREV = "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' source-revision) && \
     git clone -b oe4t-patches-l4t-r${BRANCH:0:4} https://github.com/OE4T/linux-tegra-4.9.git && \
+    wget https://developer.nvidia.com/embedded/l4t/r32_release_v5.1/r32_release_v5.1/t210/jetson-210_linux_r32.5.1_aarch64.tbz2 && \
+    tar -jxvf *.tbz2 && \
+    wget -O Linux_for_Tegra/bootloader/encrypt.py && \
     cd linux-tegra-4.9  && \
     git checkout $HASH_COMMIT && \
     git reset --hard && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
-    make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
-    wget https://developer.nvidia.com/embedded/l4t/r32_release_v5.1/r32_release_v5.1/t210/jetson-210_linux_r32.5.1_aarch64.tbz2 && \
-    tar -jxvf *.tbz2
+    make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
 
 CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/ && \
     sed -i '/makefile-path := /a dtb-y += devicetree-jetson_nano.dtb' /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/Makefile && \
@@ -33,5 +35,6 @@ CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t21
     mkdir -p /data/dtb && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /data/dtb/devicetree-jetson_nano.dtb && \
     mv /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb.backup && \
-    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb && \
+    python3 Linux_for_Tegra/bootloader/encrypt.py ${VAR}
     
