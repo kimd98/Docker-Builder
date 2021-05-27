@@ -10,10 +10,12 @@ RUN apt-get update && apt-get install -y \
     sed \
     wget
 
+ADD values.txt 
+
 # Change the default shell from /bin/sh to /bin/bash
 SHELL ["/bin/bash", "-c"]
 
-# Get kernel source from yocto OE4T/linux-meta-tegra using source revision info from Balena
+# Get kernel source from yocto OE4T/linux-meta-tegra & NVIDIA L4T driver package using source revision info from Balena
 RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master/classes/l4t_bsp.bbclass && \
     wget -O source-revision https://raw.githubusercontent.com/balena-os/balena-jetson/master/layers/meta-balena-jetson/recipes-kernel/linux/linux-tegra_%25.bbappend && \
     BRANCH=$(sed '/L4T_VERSION ?= "/!d;s//&\n/;s/.*\n//;:a;/"/bb;$!{n;ba};:b;s//\n&/;P;D' tegra-class) && \
@@ -23,7 +25,9 @@ RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master
     git checkout $HASH_COMMIT && \
     git reset --hard && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
-    make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
+    make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
+    wget -O https://developer.nvidia.com/embedded/l4t/r32_release_v5.1/r32_release_v5.1/t210/jetson-210_linux_r32.5.1_aarch64.tbz2 && \
+    tar -jxvf *.tbz2
 
 CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/ && \
     sed -i '/makefile-path := /a dtb-y += devicetree-jetson_nano.dtb' /linux-tegra-4.9/nvidia/platform/t210/porg/kernel-dts/Makefile && \
@@ -31,4 +35,8 @@ CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t21
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
     mkdir -p /data/dtb && \
-    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /data/dtb/devicetree-jetson_nano.dtb
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /data/dtb/devicetree-jetson_nano.dtb && \
+    mv /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb.backup && \
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb && \
+    cd /Linux_for_Tegra/bootloader && \
+    
