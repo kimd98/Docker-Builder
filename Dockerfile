@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     bc \
     crossbuild-essential-arm64 \
     sed \
-    wget
+    wget \
+    python3
 
 SHELL ["/bin/bash", "-c"]
 
@@ -35,7 +36,8 @@ CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t21
     mkdir -p /data/dtb && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /data/dtb/devicetree-jetson_nano.dtb && \
     mv /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb.backup && \
-    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb && \
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/kernel/dtb/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb && \
     cd /Linux_for_Tegra/bootloader && \
-    python encrypt.py ${VERSION}
+    cp t210ref/cfg/flash_l4t_t210_emmc_p3448.xml flash.xml && \
+    python3 encrypt.py ${VERSION}
     
