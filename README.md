@@ -11,7 +11,7 @@
 
    **[option 1]** Get a docker image from DockerHub
     ```
-    $ docker run  -it --rm -v ~/data-jetson:/data -e VERSION='XR2' 'gumstix2021lena/docker-builder:jetson 
+    $ docker run  -it --rm -v ~/data-jetson:/data -e VERSION='tx2' 'gumstix2021lena/docker-builder:jetson 
     ```
 
    **[option 2]** Build locally
@@ -19,8 +19,10 @@
     $ git clone -b jetson_nano https://github.com/kimd98/Docker-Builder.git
     $ cd Docker-Builder
     $ docker build -t docker-builder:jetson .
-    $ docker run  -it --rm -v ~/data-jetson:/data -e VERSION='XR2' docker-builder:jetson
+    $ docker run  -it --rm -v ~/data-jetson:/data -e VERSION='tx2' docker-builder:jetson
     ```
+    
+    VERSION: 'nano', 'tx2', 'xavier'
 
 4. Check the **dtb subfolder** to see dtb and dtb.encrypt files
 ```
