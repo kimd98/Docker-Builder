@@ -39,5 +39,6 @@ CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t21
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/kernel/dtb/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb && \
     cd /Linux_for_Tegra/bootloader && \
     cp t210ref/cfg/flash_l4t_t210_emmc_p3448.xml flash.xml && \
+    cp t210ref/nvtboot.bin nvtboot.bin && \
     python3 encrypt.py ${VERSION}
     
