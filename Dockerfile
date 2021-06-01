@@ -38,7 +38,9 @@ CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t21
     mv /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb.backup && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/kernel/dtb/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb && \
     cd /Linux_for_Tegra/bootloader && \
-    cp t210ref/cfg/flash_l4t_t210_emmc_p3448.xml flash.xml && \
-    cp t210ref/nvtboot.bin nvtboot.bin && \
+    wget -O flash.xml https://raw.githubusercontent.com/kimd98/Docker-Builder/jetson_nano/NVIDIA/jetson-nano/flash.xml && \
+    wget -O nvtboot.bin https://github.com/kimd98/Docker-Builder/raw/jetson_nano/NVIDIA/jetson-nano/nvtboot.bin && \
+#    cp t210ref/cfg/flash_l4t_t210_emmc_p3448.xml flash.xml && \
+#    cp t210ref/nvtboot.bin nvtboot.bin && \
     python3 encrypt.py ${VERSION}
     
