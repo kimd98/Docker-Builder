@@ -22,7 +22,14 @@
     $ docker run  -it --rm -v ~/data-jetson:/data -e VERSION='XR2' docker-builder:jetson
     ```
 
-4. Check the **dtb subfolder** to see dtb and dtb.encrypt files
+4. Check the **dtb subfolder** to see the dtb file
 ```
   $ ls ~/data-jetson/dtb
 ```
+   - TX2: devicetree-jetson_tx2.dtb
+
+5. Check the **signed subfolder** to see the dtb.encrypt file
+```
+  $ ls ~/data-jetson/signed
+```
+   - TX2: tegra186-quill-p3489-0888-a00-00-base_sigheader.dtb.encrypt

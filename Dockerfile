@@ -30,13 +30,13 @@ RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master
 CMD cp /data/dts/devicetree-jetson_tx2.dts /linux-tegra-4.9/nvidia/platform/t18x/quill/kernel-dts/ && \
     sed -i '/makefile-path := /a dtb-y += devicetree-jetson_tx2.dtb' /linux-tegra-4.9/nvidia/platform/t18x/quill/kernel-dts/Makefile && \
     cd /linux-tegra-4.9 && \
-    # ERROR: Cross compilation
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
     mkdir -p /data/dtb && \
+    mkdir -p /data/signed && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t18x/quill/kernel-dts/devicetree-jetson_tx2.dtb /data/dtb/devicetree-jetson_tx2.dtb && \
     mv /Linux_for_Tegra/kernel/dtb/tegra186-quill-p3489-0888-a00-00-base.dtb /Linux_for_Tegra/kernel/dtb/tegra186-quill-p3489-0888-a00-00-base.dtb.backup && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t18x/quill/kernel-dts/devicetree-jetson_tx2.dtb /Linux_for_Tegra/bootloader/tegra186-quill-p3489-0888-a00-00-base.dtb && \
     cd /Linux_for_Tegra/bootloader && \
     ./tegraflash.py --chip 0x18 --cmd "sign tegra186-quill-p3489-0888-a00-00-base.dtb" && \
-    cp tegra186-quill-p3489-0888-a00-00-base_sigheader.dtb.encrypt /data/dtb/
+    cp /Linux_for_Tegra/bootloader/tegra186-quill-p3489-0888-a00-00-base_sigheader.dtb.encrypt /data/signed/
