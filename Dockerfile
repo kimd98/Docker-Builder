@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     bc \
     crossbuild-essential-arm64 \
     sed \
-    wget
+    wget \
+    python3
 
 SHELL ["/bin/bash", "-c"]
 
