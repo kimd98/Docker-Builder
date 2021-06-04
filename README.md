@@ -9,7 +9,7 @@
     $ cp path/to/AutoBSP/devicetree-jetson.dts ~/data-jetson/dts/
     ```
 
-3. Build a docker container (Please remember to assign the correct value to the variable VERSION!)
+3. Build a docker container (Please remember to replace VERSION with the correct board name)
 
    **[option 1]** Get a docker image from DockerHub
     ```
@@ -23,7 +23,10 @@
     $ docker build -t docker-builder:jetson .
     $ docker run  -it --rm -v ~/data-jetson:/data -e VERSION=<board> docker-builder:jetson
     ```
-    - VERISON: 'tx2' or 'xavier_nx'
+    - VERSION: **'tx2'** or **'xavier_nx'**
+    - For Jetson TX2 : `docker run  -it --rm -v ~/data-jetson:/data -e VERSION='tx2' docker-builder:jetson`
+    - For Jetson Xavier NX: `docker run  -it --rm -v ~/data-jetson:/data -e VERSION='xavier_nx' docker-builder:jetson`
+    - To open an interactive shell, add `bin/bash` to the end of the run command
     
 4. Check the **dtb subfolder** to see the dtb file
     ```
