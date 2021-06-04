@@ -7,8 +7,7 @@ RUN apt-get update && apt-get install -y \
     bc \
     crossbuild-essential-arm64 \
     sed \
-    wget \
-    python3
+    wget
 
 SHELL ["/bin/bash", "-c"]
 
@@ -27,16 +26,17 @@ RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
 
 # Generate dtb and dtb.encrypt using Gumstix AutoBSP and save in the shared folder data-jetson
-CMD cp /data/dts/devicetree-jetson_tx2.dts /linux-tegra-4.9/nvidia/platform/t18x/quill/kernel-dts/ && \
-    sed -i '/makefile-path := /a dtb-y += devicetree-jetson_tx2.dtb' /linux-tegra-4.9/nvidia/platform/t18x/quill/kernel-dts/Makefile && \
+CMD if [[ $VERSION == 'xavier_nx' ]]; then KERNEL='t19x/jakku/kernel-dts'; DTB='tegra194-p3668-all-p3509-0000'; CHIP='0x19';  elif [[ $VERSION == 'tx2' ]]; then KERNEL='t18x/quill/kernel-dts'; DTB='tegra186-quill-p3489-0888-a00-00-base'; CHIP='0x18'; fi && \
+    cp /data/dts/devicetree-jetson_${VERSION}.dts /linux-tegra-4.9/nvidia/platform/${KERNEL}/ && \
+    sed -i "/makefile-path := /a dtb-y += devicetree-jetson_${VERSION}.dtb" /linux-tegra-4.9/nvidia/platform/${KERNEL}/Makefile && \
     cd /linux-tegra-4.9 && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- tegra_defconfig && \
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
     mkdir -p /data/dtb && \
     mkdir -p /data/signed && \
-    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t18x/quill/kernel-dts/devicetree-jetson_tx2.dtb /data/dtb/devicetree-jetson_tx2.dtb && \
-    mv /Linux_for_Tegra/kernel/dtb/tegra186-quill-p3489-0888-a00-00-base.dtb /Linux_for_Tegra/kernel/dtb/tegra186-quill-p3489-0888-a00-00-base.dtb.backup && \
-    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t18x/quill/kernel-dts/devicetree-jetson_tx2.dtb /Linux_for_Tegra/bootloader/tegra186-quill-p3489-0888-a00-00-base.dtb && \
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/${KERNEL}/devicetree-jetson_${VERSION}.dtb /data/dtb/devicetree-jetson_${VERSION}.dtb && \
+    mv /Linux_for_Tegra/kernel/dtb/${DTB}.dtb /Linux_for_Tegra/kernel/dtb/${DTB}.dtb.backup && \
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/${KERNEL}/devicetree-jetson_${VERSION}.dtb /Linux_for_Tegra/bootloader/${DTB}.dtb && \
     cd /Linux_for_Tegra/bootloader && \
-    ./tegraflash.py --chip 0x18 --cmd "sign tegra186-quill-p3489-0888-a00-00-base.dtb" && \
-    cp /Linux_for_Tegra/bootloader/tegra186-quill-p3489-0888-a00-00-base_sigheader.dtb.encrypt /data/signed/
+    ./tegraflash.py --chip ${CHIP} --cmd "sign ${DTB}.dtb" && \
+    cp /Linux_for_Tegra/bootloader/${DTB}_sigheader.dtb.encrypt /data/signed/
