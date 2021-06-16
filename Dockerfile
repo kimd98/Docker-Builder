@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     crossbuild-essential-arm64 \
     sed \
     wget \
+    unzip \
     python3
 
 SHELL ["/bin/bash", "-c"]
@@ -35,14 +36,10 @@ CMD cp /data/dts/devicetree-jetson_nano.dts /linux-tegra-4.9/nvidia/platform/t21
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
     mkdir -p /data/dtb && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /data/dtb/devicetree-jetson_nano.dtb && \
-    mv /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb /Linux_for_Tegra/kernel/dtb/tegra210-p3448-0002-p3449-0000-b00.dtb.backup && \
-    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/bootloader/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb && \
-    cd /Linux_for_Tegra/bootloader && \
-    ./tegraflash.py --chip 0x21 --applet nvtboot_recovery.bin --bl cboot.bin --cmd "sign; write DTB ./signed/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb.encrypt"
-
-#    wget -O flash.xml https://raw.githubusercontent.com/kimd98/Docker-Builder/jetson_nano/NVIDIA/jetson-nano/flash.xml && \
-#    wget -O nvtboot.bin https://github.com/kimd98/Docker-Builder/raw/jetson_nano/NVIDIA/jetson-nano/nvtboot.bin && \
-#    cp t210ref/cfg/flash_l4t_t210_emmc_p3448.xml flash.xml && \
-#    cp t210ref/nvtboot.bin nvtboot.bin && \
-#    python3 encrypt.py ${VERSION}
-    
+    wget https://github.com/kimd98/Docker-Builder/raw/jetson_nano/bootloader_backup.zip && \
+    unzip bootloader_backup.zip -d /Linux_for_Tegra/bootloader.temp && \
+    mv /Linux_for_Tegra/bootloader.temp/bootloader/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb /Linux_for_Tegra/bootloader.temp/bootloader/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb.backup && \
+    cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/devicetree-jetson_nano.dtb /Linux_for_Tegra/bootloader.temp/bootloader/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb && \
+    cd /Linux_for_Tegra/bootloader.temp/bootloader && \
+    ./tegraflash.py --bl cboot.bin --bldtb kernel_tegra210-p3448-0002-p3449-0000-b00.dtb  --chip 0x21 --applet nvtboot_recovery.bin --bct  P3448_A00_lpddr4_204Mhz_P987.cfg  --cfg  flash.xml   --odmdata 0xa4000  --cmd "sign" && \
+    cp /Linux_for_Tegra/bootloader.temp/bootloader/signed/kernel_tegra210-p3448-0002-p3449-0000-b00.dtb.encrypt /data/signed/deviceree-jetson_nano.dtb.encrypt
