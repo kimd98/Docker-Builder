@@ -36,9 +36,9 @@ CMD if [[ $VERSION == 'xavier_nx' ]]; then KERNEL='t19x/jakku/kernel-dts'; CHIP=
     make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs && \
     mkdir -p /data/dtb && \
     mkdir -p /data/signed && \
+    if [[ $VERSION == 'nano' ]]; then wget https://github.com/kimd98/Docker-Builder/raw/jetson/bootloader_nano.zip; mv /Linux_for_Tegra/bootloader /Linux_for_Tegra/bootloader.backup; unzip -o -j bootloader_nano.zip -d /Linux_for_Tegra/bootloader; fi && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/${KERNEL}/devicetree-jetson_${VERSION}.dtb /data/dtb/ && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/${KERNEL}/devicetree-jetson_${VERSION}.dtb /Linux_for_Tegra/bootloader/ && \
-    if [[ $VERSION == 'nano' ]] then wget https://github.com/kimd98/Docker-Builder/raw/jetson/bootloader_nano.zip; mv /Linux_for_Tegra/bootloader /Linux_for_Tegra/bootloader.backup; unzip -j bootloader_nano.zip -d /Linux_for_Tegra/bootloader; fi && \
     cd /Linux_for_Tegra/bootloader && \
-    ./tegraflash.py --chip $CHIP --cmd "sign devicetree-jetson_${VERSION}.dtb" && \
-    cp /Linux_for_Tegra/bootloader/devicetree-jetson_${VERSION}_sigheader.dtb.encrypt /data/signed/
+    if [[ $VERSION == 'nano' ]]; then ./tegraflash.py --chip $CHIP --applet nvtboot_recovery.bin --bct P3448_A00_lpddr4_204Mhz_P987.cfg --cfg flash.xml --odmdata 0xa4000 --cmd "sign"; else ./tegraflash.py --chip $CHIP --cmd "sign devicetree-jetson_${VERSION}.dtb"; fi && \
+    if [[ $VERSION == 'nano' ]]; then cp /Linux_for_Tegra/bootloader/devicetree-jetson_${VERSION}.dtb.encrypt /data/signed/; else cp /Linux_for_Tegra/bootloader/devicetree-jetson_${VERSION}_sigheader.dtb.encrypt /data/signed/; fi
