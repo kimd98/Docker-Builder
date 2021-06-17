@@ -23,7 +23,7 @@
     $ docker build -t docker-builder:jetson .
     $ docker run  -it --rm -v ~/data-jetson:/data -e VERSION=<board> docker-builder:jetson
     ```
-    - VERSION: **'tx2'** or **'xavier_nx'**
+    - VERSION: **'tx2'**, **'xavier_nx'** or **'nano'**
     - For Jetson TX2 : `docker run  -it --rm -v ~/data-jetson:/data -e VERSION='tx2' docker-builder:jetson`
     - For Jetson Xavier NX: `docker run  -it --rm -v ~/data-jetson:/data -e VERSION='xavier_nx' docker-builder:jetson`
     - For Jetson Nano: `docker run  -it --rm -v ~/data-jetson:/data -e VERSION='nano' docker-builder:jetson`
