@@ -21,7 +21,6 @@ RUN wget -O tegra-class https://raw.githubusercontent.com/OE4T/meta-tegra/master
     git clone -b oe4t-patches-l4t-r${BRANCH:0:4} https://github.com/OE4T/linux-tegra-4.9.git && \
     wget https://developer.nvidia.com/embedded/l4t/r32_release_v5.1/r32_release_v5.1/t210/jetson-210_linux_r32.5.1_aarch64.tbz2 && \
     tar -jxvf *.tbz2 && \
-    wget -O Linux_for_Tegra/bootloader/encrypt.py https://raw.githubusercontent.com/kimd98/Docker-Builder/jetson_nano/encrypt.py && \
     cd linux-tegra-4.9  && \
     git checkout $HASH_COMMIT && \
     git reset --hard && \

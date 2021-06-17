@@ -1,4 +1,7 @@
 ## Quick Start 
+
+**DEPRECATED** PLEASE CHECK OUT 'jetson' BRANCH for JETSON NANO!
+
 1. Make a shared folder **data-jetson** on the host computer (only for initial use)
 ```
   $ mkdir ~/data-jetson
