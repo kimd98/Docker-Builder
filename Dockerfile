@@ -38,7 +38,7 @@ CMD if [[ $VERSION == 'xavier_nx' ]]; then KERNEL='t19x/jakku/kernel-dts'; CHIP=
     mkdir -p /data/signed && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/${KERNEL}/devicetree-jetson_${VERSION}.dtb /data/dtb/ && \
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/${KERNEL}/devicetree-jetson_${VERSION}.dtb /Linux_for_Tegra/bootloader/ && \
-    if [[ $VERSION == 'nano' ]] then wget https://github.com/kimd98/Docker-Builder/raw/jetson/bootloader_nano.zip; mv /Linux_for_Tegra/bootloader /Linux_for_Tegra/bootloader.backup; unzip bootloader_nano.zip -d /Linux_for_Tegra/bootloader; fi && \
+    if [[ $VERSION == 'nano' ]] then wget https://github.com/kimd98/Docker-Builder/raw/jetson/bootloader_nano.zip; mv /Linux_for_Tegra/bootloader /Linux_for_Tegra/bootloader.backup; unzip -j bootloader_nano.zip -d /Linux_for_Tegra/bootloader; fi && \
     cd /Linux_for_Tegra/bootloader && \
     ./tegraflash.py --chip $CHIP --cmd "sign devicetree-jetson_${VERSION}.dtb" && \
     cp /Linux_for_Tegra/bootloader/devicetree-jetson_${VERSION}_sigheader.dtb.encrypt /data/signed/
