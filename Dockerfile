@@ -41,4 +41,4 @@ CMD if [[ $VERSION == 'xavier_nx' ]]; then KERNEL='t19x/jakku/kernel-dts'; CHIP=
     cp /linux-tegra-4.9/arch/arm64/boot/dts/_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/${KERNEL}/devicetree-jetson_${VERSION}.dtb /Linux_for_Tegra/bootloader/ && \
     cd /Linux_for_Tegra/bootloader && \
     if [[ $VERSION == 'nano' ]]; then ./tegraflash.py --chip $CHIP --applet nvtboot_recovery.bin --bct P3448_A00_lpddr4_204Mhz_P987.cfg --cfg flash.xml --odmdata 0xa4000 --cmd "sign"; else ./tegraflash.py --chip $CHIP --cmd "sign devicetree-jetson_${VERSION}.dtb"; fi && \
-    if [[ $VERSION == 'nano' ]]; then cp /Linux_for_Tegra/bootloader/devicetree-jetson_${VERSION}.dtb.encrypt /data/signed/; else cp /Linux_for_Tegra/bootloader/devicetree-jetson_${VERSION}_sigheader.dtb.encrypt /data/signed/; fi
+    if [[ $VERSION == 'nano' ]]; then cp /Linux_for_Tegra/bootloader/signed/devicetree-jetson_${VERSION}.dtb.encrypt /data/signed/; else cp /Linux_for_Tegra/bootloader/devicetree-jetson_${VERSION}_sigheader.dtb.encrypt /data/signed/; fi

@@ -26,6 +26,7 @@
     - VERSION: **'tx2'** or **'xavier_nx'**
     - For Jetson TX2 : `docker run  -it --rm -v ~/data-jetson:/data -e VERSION='tx2' docker-builder:jetson`
     - For Jetson Xavier NX: `docker run  -it --rm -v ~/data-jetson:/data -e VERSION='xavier_nx' docker-builder:jetson`
+    - For Jetson Nano: `docker run  -it --rm -v ~/data-jetson:/data -e VERSION='nano' docker-builder:jetson`
     - To open an interactive shell, add `bin/bash` to the end of the run command
     
 4. Check the **dtb subfolder** to see the dtb file
